@@ -7,12 +7,14 @@ CockroachDB adapter for ActiveRecord 5 and 6. This is a lightweight extension of
 Add this line to your project's Gemfile:
 
 ```ruby
-gem 'activerecord-cockroachdb-adapter', '~> 6.1.0'
+gem 'activerecord-cockroachdb-adapter', '~> 7.0.0'
 ```
 
 If you're using Rails 5.2, use the `5.2.x` versions of this gem.
 
 If you're using Rails 6.0, use the `6.0.x` versions of this gem.
+
+If you're using Rails 7.0, use the `7.0.x` versions of this gem.
 
 In `database.yml`, use the following adapter setting:
 
@@ -60,7 +62,7 @@ gem install rgeo -- --with-geos-dir=/path/to/cockroach/lib/
 
 ### Working with RGeo
 
-RGeo uses [factories](https://en.wikipedia.org/wiki/Factory_(object-oriented_programming)) to create geometry objects and define their properties. Different factories define their own implementations for standard methods. For instance, the `RGeo::Geographic.spherical_factory` accepts latitudes and longitues as its coordinates and does computations on a spherical surface, while `RGeo::Cartesian.factory` implements geometry objects on a plane.
+RGeo uses [factories](<https://en.wikipedia.org/wiki/Factory_(object-oriented_programming)>) to create geometry objects and define their properties. Different factories define their own implementations for standard methods. For instance, the `RGeo::Geographic.spherical_factory` accepts latitudes and longitues as its coordinates and does computations on a spherical surface, while `RGeo::Cartesian.factory` implements geometry objects on a plane.
 
 The factory (or factories) you choose to use will depend on the requirements of your application and what you need to do with the geometries they produce. For example, if you are working with points or other simple geometries across long distances and need precise results, the spherical factory is a good choice. If you're working with polygons or multipolygons and analyzing complex relationships between them (`intersects?`, `difference`, etc.), then using a cartesian factory backed by GEOS is a much better option.
 
@@ -92,6 +94,7 @@ poly = factory.polygon(outer_ring)
 p line_string.intersects? poly
 #=> true
 ```
+
 ### Creating Spatial Tables
 
 To store spatial data, you must create a column with a spatial type. PostGIS
@@ -172,6 +175,7 @@ change_table :my_table do |t|
   t.index :lonlat, using: :gist
 end
 ```
+
 ### Configuring ActiveRecord
 
 ActiveRecord's usefulness stems from the way it automatically configures
@@ -319,7 +323,7 @@ p modified_fac.parse_wkt(wkt)
 #=>  #<RGeo::Geographic::SphericalPolygonImpl>
 ```
 
-Be careful when performing calculations on potentially invalid geometries, as the results might be nonsensical. For example, the area returned of an hourglass made of 2 equivalent triangles with a self-intersection in the middle is 0. 
+Be careful when performing calculations on potentially invalid geometries, as the results might be nonsensical. For example, the area returned of an hourglass made of 2 equivalent triangles with a self-intersection in the middle is 0.
 
 Note that when using the `spherical_factory`, there is a chance that valid geometries will be interpreted as invalid due to floating point issues with small geometries.
 
